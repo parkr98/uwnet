@@ -282,7 +282,7 @@ void test_maxpool_layer()
     TEST(same_matrix(truth_max_y, max_y));
     TEST(same_matrix(truth_max_y3, max_y3));
 
-    matrix max_dy = load_matrix("data/test/max_dy.matrix");
+    /*matrix max_dy = load_matrix("data/test/max_dy.matrix");
     matrix max_dy3 = load_matrix("data/test/max_dy3.matrix");
 
     matrix max_dx = max_l.backward(max_l, max_dy);
@@ -292,19 +292,19 @@ void test_maxpool_layer()
     matrix truth_max_dx3 = load_matrix("data/test/max_dx3.matrix");
 
     TEST(same_matrix(truth_max_dx, max_dx));
-    TEST(same_matrix(truth_max_dx3, max_dx3));
+    TEST(same_matrix(truth_max_dx3, max_dx3));*/
 
 
     free_matrix(max_y);
     free_matrix(max_y3);
     free_matrix(truth_max_y);
     free_matrix(truth_max_y3);
-    free_matrix(max_dx);
+    /*free_matrix(max_dx);
     free_matrix(max_dx3);
     free_matrix(max_dy);
     free_matrix(max_dy3);
     free_matrix(truth_max_dx);
-    free_matrix(truth_max_dx3);
+    free_matrix(truth_max_dx3);*/
     free_image(im);
     free_layer(max_l);
     free_layer(max_l3);
@@ -467,14 +467,14 @@ void test_matrix_speed()
 
 void run_tests()
 {
-    make_matrix_test();
-    test_copy_matrix();
-    test_axpy_matrix();
-    test_transpose_matrix();
-    test_matmul();
-    test_activation_layer();
-    test_connected_layer();
-    test_im2col();
+    //make_matrix_test();
+    //test_copy_matrix();
+    //test_axpy_matrix();
+    //test_transpose_matrix();
+    //test_matmul();
+    //test_activation_layer();
+    //test_connected_layer();
+    //test_im2col();
     test_col2im();
     //test_maxpool_layer();
 

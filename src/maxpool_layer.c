@@ -21,8 +21,23 @@ matrix forward_maxpool_layer(layer l, matrix in)
     matrix out = make_matrix(in.rows, outw*outh*l.channels);
 
     // TODO: 6.1 - iterate over the input and fill in the output with max values
-
-
+    int i, j, c, k;
+    for(i = 0; i < in.rows; ++i){
+        //each image
+        image example = float_to_image(in.data + i*in.cols, l.width, l.height, l.channels);
+        matrix x = im2col(example, l.size, l.stride);
+        for(c = 0; c < l.channels; ++c){
+            for (j = 0; j < x.cols; ++j) {
+                //each spatial loaction in each channel
+                float max = x.data[c*x.cols*l.size*l.size + j];
+                for (k = 1; k < l.size * l.size; ++k) {
+                    max = (max < x.data[c*x.cols*l.size*l.size + k*x.cols + j]) ? x.data[c*x.cols*l.size*l.size + k*x.cols + j] : max;
+                }
+                out.data[i*out.cols + c*x.cols + j] = max;
+            }
+        }
+        free_matrix(x);
+    }
 
     return out;
 }
