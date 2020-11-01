@@ -29,11 +29,13 @@ matrix forward_maxpool_layer(layer l, matrix in)
         for(c = 0; c < l.channels; ++c){
             for (j = 0; j < x.cols; ++j) {
                 //each spatial loaction in each channel
-                float max = x.data[c*x.cols*l.size*l.size + j];
+                int max = 0;
                 for (k = 1; k < l.size * l.size; ++k) {
-                    max = (max < x.data[c*x.cols*l.size*l.size + k*x.cols + j]) ? x.data[c*x.cols*l.size*l.size + k*x.cols + j] : max;
+                    if (x.data[c*x.cols*l.size*l.size + max*x.cols + j] < x.data[c*x.cols*l.size*l.size + k*x.cols + j]) {
+                        max = k;
+                    }
                 }
-                out.data[i*out.cols + c*x.cols + j] = max;
+                out.data[i*out.cols + c*x.cols + j] = x.data[c*x.cols*l.size*l.size + max*x.cols + j];
             }
         }
         free_matrix(x);
@@ -55,8 +57,35 @@ matrix backward_maxpool_layer(layer l, matrix dy)
     // TODO: 6.2 - find the max values in the input again and fill in the
     // corresponding delta with the delta from the output. This should be
     // similar to the forward method in structure.
+    int i, j, c, k;
+    for(i = 0; i < in.rows; ++i){
+        //each image
+        image example = float_to_image(in.data + i*in.cols, l.width, l.height, l.channels);
+        matrix x = im2col(example, l.size, l.stride);
+        for(c = 0; c < l.channels; ++c){
+            for (j = 0; j < x.cols; ++j) {
+                //each spatial loaction in each channel
+                int max = 0;
+                for (k = 1; k < l.size * l.size; ++k) {
+                    //find max
+                    if (x.data[c*x.cols*l.size*l.size + max*x.cols + j] < x.data[c*x.cols*l.size*l.size + k*x.cols + j]) {
+                        x.data[c*x.cols*l.size*l.size + max*x.cols + j] = 0;
+                        max = k;
+                    } else {
+                        x.data[c*x.cols*l.size*l.size + k*x.cols + j] = 0;
+                    }
+                }
 
-
+                int top_left_row = j / outw * l.stride - (l.size-1)/2;
+                int top_left_col = j % outw * l.stride - (l.size-1)/2;
+                int max_row = top_left_row + max / l.size;
+                int max_col = top_left_col + max % l.size;
+                
+                dx.data[i*dx.cols + c*l.width*l.height + max_row*l.width + max_col] += dy.data[i*dy.cols + c*x.cols + j];
+            }
+        }
+        free_matrix(x);
+    }
 
     return dx;
 }
