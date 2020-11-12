@@ -11,6 +11,7 @@ mnist*
 cifar*
 uwnet
 .jekyll-cache
+*.tar.gz
 
 # OS Generated #
 .DS_Store*
