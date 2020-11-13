@@ -89,7 +89,6 @@ image col2im(int width, int height, int channels, matrix col, int size, int stri
     image im = make_image(width, height, channels);
     int outw = (im.w-1)/stride + 1;
     int outh = (im.h-1)/stride + 1;
-    int rows = im.c*size*size;
     int cols = outw * outh;
 
     // TODO: 5.2

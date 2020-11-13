@@ -53,7 +53,6 @@ matrix backward_maxpool_layer(layer l, matrix dy)
     matrix dx = make_matrix(dy.rows, l.width*l.height*l.channels);
 
     int outw = (l.width-1)/l.stride + 1;
-    int outh = (l.height-1)/l.stride + 1;
     // TODO: 6.2 - find the max values in the input again and fill in the
     // corresponding delta with the delta from the output. This should be
     // similar to the forward method in structure.
